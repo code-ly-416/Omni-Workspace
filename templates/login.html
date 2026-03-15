@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}Login - Modular Life OS{% endblock %}
+{% block page_header %}Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <form action="/login" method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label text-muted">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label text-muted">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                </form>
+                <div class="text-center text-muted small">
+                    Don't have an account? <a href="/register" class="text-decoration-none">Register here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

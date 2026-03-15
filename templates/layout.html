@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Modular Life OS{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body{% if session.get('user_id') %} class="app-shell-no-transition"{% endif %}>
+    {% if session.get('user_id') %}
+    <aside class="app-sidebar" id="appSidebar">
+        <div class="sidebar-top">
+            <button id="sidebarRailToggle" type="button" class="btn btn-light btn-sm sidebar-menu-btn" aria-label="Expand sidebar" aria-expanded="false">
+                ☰
+            </button>
+            <div class="sidebar-brand">Modular Life OS</div>
+        </div>
+        <nav class="sidebar-nav" aria-label="Main navigation">
+            <a class="sidebar-link" href="/" data-nav-link>Dashboard</a>
+            <a class="sidebar-link" href="/tasks" data-nav-link>Tasks</a>
+            <a class="sidebar-link" href="/tags" data-nav-link>Tags</a>
+            <a class="sidebar-link" href="/projects" data-nav-link>Projects</a>
+            <a class="sidebar-link" href="/courses" data-nav-link>Courses</a>
+            <a class="sidebar-link" href="/categories" data-nav-link>Categories</a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="/logout" class="btn btn-sm btn-outline-light w-100">Logout</a>
+        </div>
+    </aside>
+    <button class="sidebar-backdrop" id="sidebarBackdrop" type="button" aria-label="Close sidebar"></button>
+    {% endif %}
+
+    <div class="app-main{% if not session.get('user_id') %} auth-main{% endif %}">
+        <header class="app-header">
+            <div class="d-flex align-items-center gap-2 min-w-0">
+                <h1 class="app-page-title mb-0">{% block page_header %}{{ self.title() }}{% endblock %}</h1>
+            </div>
+            <div class="app-header-actions">
+                {% block page_actions %}{% endblock %}
+            </div>
+        </header>
+
+        <main class="app-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app-shell.js') }}" defer></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

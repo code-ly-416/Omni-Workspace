@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard - Modular Life OS{% endblock %}
+{% block page_header %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="dashboard-ui">
+    <aside class="dashboard-panel">
+        <div class="dashboard-panel-head">
+            <h2 class="dashboard-panel-title">Calendar</h2>
+            <a href="/tasks" class="btn btn-sm btn-light border">Open Tasks</a>
+        </div>
+
+        <div class="dashboard-search-wrap">
+            <span class="dashboard-search-icon">⌕</span>
+            <input type="text" id="dashboardEventSearch" class="form-control dashboard-search-input" placeholder="Search events...">
+        </div>
+
+        <div class="dashboard-mini-head">
+            <button type="button" class="btn btn-sm btn-light border" id="calendarMiniPrevMonth">‹</button>
+            <div class="fw-semibold small" id="calendarMiniMonthLabel">Month</div>
+            <button type="button" class="btn btn-sm btn-light border" id="calendarMiniNextMonth">›</button>
+        </div>
+
+        <div class="dashboard-mini-weekdays">
+            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+        </div>
+        <div class="dashboard-mini-grid" id="dashboardMiniCalendarGrid"></div>
+
+        <div class="dashboard-selected-day mt-3 pt-3 border-top">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-muted">Selected Day</span>
+                <span class="small fw-semibold" id="selectedDayLabel">-</span>
+            </div>
+            <div id="selectedDayTasks" class="d-flex flex-column gap-2">
+                <div class="text-muted small">No tasks for this day.</div>
+            </div>
+        </div>
+
+        <div class="dashboard-panel-foot mt-3 pt-3 border-top">
+            <div class="small text-muted mb-2">Today</div>
+            {% if daily_tasks %}
+            <div class="d-flex flex-column gap-2">
+                {% for task in daily_tasks[:4] %}
+                <div class="dashboard-inline-task">
+                    <span class="dashboard-inline-dot"></span>
+                    <span class="text-truncate">{{ task.title }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-muted small">No tasks due today.</div>
+            {% endif %}
+        </div>
+    </aside>
+
+    <section class="dashboard-board">
+        <div class="dashboard-board-head">
+            <div class="dashboard-board-title-wrap">
+                <h2 class="dashboard-board-title" id="calendarMonthLabel">Month Year</h2>
+                <button type="button" class="btn btn-sm btn-light border" id="calendarTodayBtn">Today</button>
+            </div>
+            <div class="dashboard-board-actions">
+                <button type="button" class="btn btn-sm btn-light border" id="calendarPrevMonth">‹</button>
+                <button type="button" class="btn btn-sm btn-light border" id="calendarNextMonth">›</button>
+                <div class="dashboard-view-pills">
+                    <button type="button" class="dashboard-pill" data-calendar-view="day">Day</button>
+                    <button type="button" class="dashboard-pill" data-calendar-view="week">Week</button>
+                    <button type="button" class="dashboard-pill active" data-calendar-view="month">Month</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-month-wrap">
+            <div class="dashboard-month-weekdays">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+            <div class="dashboard-month-grid" id="dashboardCalendarGrid"></div>
+        </div>
+    </section>
+</section>
+
+<script id="dashboardCalendarEvents" type="application/json">{{ calendar_events | tojson }}</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+{% endblock %}
